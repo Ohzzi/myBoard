@@ -12,10 +12,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.boot.test.web.client.TestRestTemplate;
 import org.springframework.boot.web.server.LocalServerPort;
-import org.springframework.http.HttpEntity;
-import org.springframework.http.HttpMethod;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
+import org.springframework.http.*;
 
 import java.util.List;
 
@@ -96,5 +93,31 @@ class PostsControllerTest {
         List<Posts> all = postsRepository.findAll();
         assertThat(all.get(0).getTitle()).isEqualTo(expectedTitle);
         assertThat(all.get(0).getContent()).isEqualTo(expectedContent);
+    }
+
+    @Test
+    void 게시글_삭제() throws Exception {
+        //given
+        String title = "title";
+        String content = "content";
+        Posts savedPost = postsRepository.save(Posts.builder()
+                .title(title)
+                .content(content)
+                .author("author")
+                .build());
+
+        Long id = savedPost.getId();
+        String url = "http://localhost:" + port + "/api/v1/posts/" + id;
+
+        //when
+        HttpEntity requestEntity = new HttpEntity(new HttpHeaders());
+        ResponseEntity<Long> responseEntity = testRestTemplate.exchange(url, HttpMethod.DELETE, requestEntity, Long.class);
+
+        //then
+        assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(responseEntity.getBody()).isGreaterThan(0L);
+
+        assertThat(postsRepository.findById(id)).isEmpty();
+
     }
 }
