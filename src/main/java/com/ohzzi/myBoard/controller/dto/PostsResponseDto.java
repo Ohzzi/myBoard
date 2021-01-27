@@ -10,11 +10,13 @@ public class PostsResponseDto {
     private String title;
     private String content;
     private String author;
+    private Long viewCount;
 
     public PostsResponseDto(Posts post) {
         this.id = post.getId();
         this.title = post.getTitle();
         this.content = post.getContent();
         this.author = post.getAuthor();
+        this.viewCount = post.getViewCount();
     }
 }

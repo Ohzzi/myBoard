@@ -1,5 +1,6 @@
 package com.ohzzi.myBoard.controller;
 
+import com.ohzzi.myBoard.controller.dto.PostsResponseDto;
 import com.ohzzi.myBoard.controller.dto.PostsSaveRequestDto;
 import com.ohzzi.myBoard.controller.dto.PostsUpdateRequestDto;
 import com.ohzzi.myBoard.domain.posts.Posts;
@@ -35,7 +36,7 @@ class PostsControllerTest {
     }
 
     @Test
-    void 게시물_등록() {
+    void 게시글_등록() {
         //given
         String title = "title";
         String content = "content";
@@ -119,5 +120,30 @@ class PostsControllerTest {
 
         assertThat(postsRepository.findById(id)).isEmpty();
 
+    }
+
+    @Test
+    void 게시글_조회() throws Exception {
+        //given
+        String title = "title";
+        String content = "content";
+        Posts savedPost = postsRepository.save(Posts.builder()
+                .title(title)
+                .content(content)
+                .author("author")
+                .build());
+
+        Long id = savedPost.getId();
+        String url = "http://localhost:" + port + "/api/v1/posts/" + id;
+
+        //when
+        String body = testRestTemplate.getForObject(url, String.class);
+        //ResponseEntity<Long> responseEntity = testRestTemplate.getForEntity(url, Long.class);
+
+        //then
+        //assertThat(responseEntity.getStatusCode()).isEqualTo(HttpStatus.OK);
+        assertThat(body).contains(title);
+        assertThat(body).contains(content);
+        assertThat(postsRepository.findById(id).get().getViewCount()).isEqualTo(1);
     }
 }

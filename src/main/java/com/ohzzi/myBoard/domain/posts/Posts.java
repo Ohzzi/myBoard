@@ -20,16 +20,22 @@ public class Posts {
     @Column(columnDefinition = "TEXT", nullable = false)
     private String content;
     private String author;
+    private long viewCount;
 
     @Builder
     public Posts(String title, String content, String author) {
         this.title = title;
         this.content = content;
         this.author = author;
+        this.viewCount = 0;
     }
 
     public void updatePost(String title, String content) {
         this.title = title;
         this.content = content;
+    }
+
+    public void updateViewCount() {
+        this.viewCount++;
     }
 }
