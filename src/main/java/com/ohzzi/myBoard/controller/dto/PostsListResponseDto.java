@@ -3,20 +3,20 @@ package com.ohzzi.myBoard.controller.dto;
 import com.ohzzi.myBoard.domain.posts.Posts;
 import lombok.Getter;
 
+import java.time.LocalDateTime;
+
 @Getter
-public class PostsResponseDto {
+public class PostsListResponseDto {
 
     private Long id;
     private String title;
-    private String content;
     private String author;
-    private Long viewCount;
+    private LocalDateTime modifiedDate;
 
-    public PostsResponseDto(Posts entity) {
+    public PostsListResponseDto(Posts entity) {
         this.id = entity.getId();
         this.title = entity.getTitle();
-        this.content = entity.getContent();
         this.author = entity.getAuthor();
-        this.viewCount = entity.getViewCount();
+        this.modifiedDate = entity.getModifiedDate();
     }
 }

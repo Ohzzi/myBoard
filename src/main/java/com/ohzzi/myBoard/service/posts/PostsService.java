@@ -1,5 +1,6 @@
 package com.ohzzi.myBoard.service.posts;
 
+import com.ohzzi.myBoard.controller.dto.PostsListResponseDto;
 import com.ohzzi.myBoard.controller.dto.PostsResponseDto;
 import com.ohzzi.myBoard.controller.dto.PostsSaveRequestDto;
 import com.ohzzi.myBoard.controller.dto.PostsUpdateRequestDto;
@@ -7,8 +8,11 @@ import com.ohzzi.myBoard.domain.posts.Posts;
 import com.ohzzi.myBoard.domain.posts.PostsRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import javax.transaction.Transactional;
+import java.util.List;
+import java.util.stream.Collectors;
+
 
 @RequiredArgsConstructor
 @Service
@@ -50,5 +54,12 @@ public class PostsService {
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id= " + id));
         post.updateViewCount();
         return new PostsResponseDto(post);
+    }
+
+    @Transactional(readOnly = true)
+    public List<PostsListResponseDto> findAllDesc() {
+        return postsRepository.findAllDesc().stream()
+                .map(PostsListResponseDto::new)
+                .collect(Collectors.toList());
     }
 }
