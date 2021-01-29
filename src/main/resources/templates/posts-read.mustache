@@ -1,0 +1,12 @@
+{{>layout/header}}
+
+<h1>{{post.id}}. {{post.title}}</h1>
+<div class="col-md-12">
+    <label for="author"> 작성자 {{post.author}} 조회 수 {{post.viewCount}}</label>
+    <div>
+        {{post.content}}
+    </div>
+</div>
+
+
+{{>layout/footer}}
