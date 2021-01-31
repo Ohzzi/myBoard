@@ -49,10 +49,18 @@ public class PostsService {
 
     // Read
     @Transactional
-    public PostsResponseDto findById(Long id) {
+    public PostsResponseDto readPost(Long id) {
         Posts post = postsRepository.findById(id)
                 .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id= " + id));
         post.updateViewCount();
+        return new PostsResponseDto(post);
+    }
+
+    // 조회수 증가 x
+    @Transactional(readOnly = true)
+    public PostsResponseDto findById(Long id) {
+        Posts post = postsRepository.findById(id)
+                .orElseThrow(() -> new IllegalArgumentException("해당 게시글이 없습니다. id= " + id));
         return new PostsResponseDto(post);
     }
 
